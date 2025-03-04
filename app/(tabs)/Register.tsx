@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { TextInput, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
+import { styles } from '@/app/css/RegisterPage'; // ✅ Import styles
+import { useRouter } from 'expo-router'; // ✅ Import router for navigation
 
 export default function RegisterScreen() {
+  const router = useRouter(); // ✅ Router for navigation
+
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -10,6 +14,10 @@ export default function RegisterScreen() {
 
   const handleRegister = () => {
     console.log('Registering with:', fullName, email, password, confirmPassword);
+  };
+
+  const navigateToSignIn = () => {
+    router.push('/'); // ✅ Navigates to the main tab screen (index.tsx)
   };
 
   return (
@@ -61,7 +69,8 @@ export default function RegisterScreen() {
         </TouchableOpacity>
 
         <Text style={styles.signInText}>
-          Already have an account? <Text style={styles.signInLink}>Sign In</Text>
+          Already have an account?{' '}
+          <Text style={styles.signInLink} onPress={navigateToSignIn}>Sign In</Text>
         </Text>
       </View>
 
@@ -69,72 +78,3 @@ export default function RegisterScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#A7A8D5',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  topSection: {
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    height: '30%',
-    backgroundColor: '#8A8BCB',
-    borderBottomLeftRadius: 40,
-    borderBottomRightRadius: 40,
-  },
-  formContainer: {
-    backgroundColor: '#D2D3EB',
-    width: '90%',
-    padding: 20,
-    borderRadius: 15,
-    alignItems: 'center',
-    elevation: 5,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    width: '100%',
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    backgroundColor: 'white',
-    marginBottom: 15,
-  },
-  signUpButton: {
-    width: '100%',
-    height: 50,
-    backgroundColor: '#6B6DAE',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    marginBottom: 15,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  signInText: {
-    fontSize: 14,
-  },
-  signInLink: {
-    color: '#6B6DAE',
-    fontWeight: 'bold',
-  },
-  bottomSection: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    height: '8%',
-    backgroundColor: '#6B6DAE',
-  },
-});
