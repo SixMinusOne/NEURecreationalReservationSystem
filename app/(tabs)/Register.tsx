@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { TextInput, TouchableOpacity } from 'react-native';
+import { TextInput, TouchableOpacity, Image } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { styles } from '@/app/css/RegisterPage'; // ✅ Import styles
 import { useRouter } from 'expo-router'; // ✅ Import router for navigation
+import { supabase } from '@/app/lib/supabase'; // ✅ Ensure Supabase is properly set up
 
 export default function RegisterScreen() {
   const router = useRouter(); // ✅ Router for navigation
@@ -14,6 +15,19 @@ export default function RegisterScreen() {
 
   const handleRegister = () => {
     console.log('Registering with:', fullName, email, password, confirmPassword);
+  };
+
+  const handleGoogleSignIn = async () => {
+    const { error, data } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
+
+    if (error) {
+      console.error('Google Sign-In error:', error.message);
+    } else {
+      console.log('Google Sign-In success:', data);
+      router.push('/(tabs)/Home'); // ✅ Navigate to Home.tsx
+    }
   };
 
   const navigateToSignIn = () => {
@@ -66,6 +80,12 @@ export default function RegisterScreen() {
 
         <TouchableOpacity style={styles.signUpButton} onPress={handleRegister}>
           <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.orText}>Or sign up with</Text>
+
+        <TouchableOpacity style={styles.googleSignInButton} onPress={handleGoogleSignIn}>
+          <Image source={require('@/assets/images/GoogleLogo.png')} style={styles.googleLogo} />
         </TouchableOpacity>
 
         <Text style={styles.signInText}>
