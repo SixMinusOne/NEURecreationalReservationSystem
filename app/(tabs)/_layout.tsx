@@ -2,19 +2,19 @@ import React, { useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
-import { useRouter } from 'expo-router'; // Ensure useRouter is imported
-import { supabase } from '@/app/lib/supabase'; // Ensure Supabase is correctly imported
-
+import { GestureHandlerRootView } from 'react-native-gesture-handler'; // ✅ Import GestureHandlerRootView
+import { useRouter } from 'expo-router';
+import { supabase } from '@/app/lib/supabase';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+// Tab Bar Icon Component
 function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>['name']; color: string }) {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
-// AuthListener should be placed in a parent component or _layout.tsx, not here
+// AuthListener Component (Redirects if session exists)
 function AuthListener() {
   const router = useRouter();
 
@@ -36,13 +36,11 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <>
-      <AuthListener /> {/* Ensure it runs inside the layout */}
+    <GestureHandlerRootView style={{ flex: 1 }}> {/* ✅ Wrap everything inside this */}
+      <AuthListener /> {/* Ensures authentication check runs inside layout */}
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-          // Disable the static render of the header on web
-          // to prevent a hydration error in React Navigation v6.
           headerShown: useClientOnlyValue(false, true),
         }}>
         <Tabs.Screen
@@ -74,6 +72,6 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
-    </>
+    </GestureHandlerRootView>
   );
 }

@@ -92,6 +92,11 @@ const styles = StyleSheet.create({
     height: '8%',
     backgroundColor: '#6B6DAE',
   },
+
+  googleButtonText: {
+    color: 'white',
+    fontWeight: '600',
+  },
 });
 
 export default styles;
