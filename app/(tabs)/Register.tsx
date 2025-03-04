@@ -18,17 +18,31 @@ export default function RegisterScreen() {
   };
 
   const handleGoogleSignIn = async () => {
-    const { error, data } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    });
-
-    if (error) {
-      console.error('Google Sign-In error:', error.message);
-    } else {
+    console.log('Google Sign-In button clicked'); // Log when button is pressed
+  
+    try {
+      const { error, data } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: 'myapp://auth', // Must match app.json scheme
+        },
+      });
+  
+      console.log('Sign-In Response:', data, error);
+  
+      if (error) {
+        console.error('Google Sign-In error:', error.message);
+        return;
+      }
+  
       console.log('Google Sign-In success:', data);
-      router.push('/(tabs)/Home'); // ✅ Navigate to Home.tsx
+      router.push('/(tabs)/Home');
+    } catch (err) {
+      console.error('Google Sign-In failed:', err);
     }
   };
+  
+  
 
   const navigateToSignIn = () => {
     router.push('/'); // ✅ Navigates to the main tab screen (index.tsx)
